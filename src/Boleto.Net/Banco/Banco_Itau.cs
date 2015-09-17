@@ -104,7 +104,7 @@ namespace BoletoNet
                     && boleto.Carteira != "168")
                     _dacNossoNumero = Mod10(boleto.Cedente.ContaBancaria.Agencia + boleto.Cedente.ContaBancaria.Conta + boleto.Carteira + boleto.NossoNumero);
                 else
-                    // Excessão 126 - 131 - 146 - 150 - 168
+                    // Excessão 112 - 126 - 131 - 146 - 150 - 168
                     // carteira/nosso numero
                     _dacNossoNumero = Mod10(boleto.Carteira + boleto.NossoNumero);
 
@@ -163,7 +163,7 @@ namespace BoletoNet
                                       boleto.NossoNumero, _dacNossoNumero, boleto.Cedente.ContaBancaria.Agencia,//Flavio(fhlviana@hotmail.com) => Cedente.ContaBancaria.Agencia --> boleto.Cedente.ContaBancaria.Agencia
                                       Utils.FormatCode(boleto.Cedente.ContaBancaria.Conta, 5), boleto.Cedente.ContaBancaria.DigitoConta);//Flavio(fhlviana@hotmail.com) => Cedente.ContaBancaria.DigitoConta --> boleto.Cedente.ContaBancaria.DigitoConta
                 }
-                else if (boleto.Carteira == "198" || boleto.Carteira == "107"
+                else if (boleto.Carteira == "112" || boleto.Carteira == "198" || boleto.Carteira == "107"
                          || boleto.Carteira == "122" || boleto.Carteira == "142"
                          || boleto.Carteira == "143" || boleto.Carteira == "196")
                 {
@@ -283,7 +283,7 @@ namespace BoletoNet
 
                     #endregion FGGGG.GGHHHZ
                 }
-                else if (boleto.Carteira == "198" || boleto.Carteira == "107"
+                else if (boleto.Carteira == "112" || boleto.Carteira == "198" || boleto.Carteira == "107"
                      || boleto.Carteira == "122" || boleto.Carteira == "142"
                      || boleto.Carteira == "143" || boleto.Carteira == "196")
                 {
