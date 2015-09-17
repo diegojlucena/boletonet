@@ -12,7 +12,6 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Web.UI;
-using NReco.PdfGenerator;
 
 [assembly: WebResource("BoletoNet.BoletoImpressao.BoletoNet.css", "text/css", PerformSubstitution = true)]
 [assembly: WebResource("BoletoNet.Imagens.barra.gif", "image/gif")]
@@ -95,7 +94,8 @@ namespace BoletoNet
         /// exibe o boleto no formato de propaganda
         /// </summary>
         [Browsable(true), Description("Formata o boleto no layout de propaganda")]
-        public bool FormatoPropaganda {
+        public bool FormatoPropaganda
+        {
             get { return _formatoPropaganda; }
             set { _formatoPropaganda = value; }
         }
@@ -104,7 +104,8 @@ namespace BoletoNet
         /// string base64 da imagem
         /// </summary>
         [Browsable(true), Description("string base64 da imagem")]
-        public string ImagemPropaganda {
+        public string ImagemPropaganda
+        {
             get { return _imagemPropaganda; }
             set { _imagemPropaganda = value; }
         }
@@ -582,7 +583,7 @@ namespace BoletoNet
             {
                 html.Append(_ajustaTamanhoFonteHtml);
             }
-            if(_ajustaFamiliaFonte)
+            if (_ajustaFamiliaFonte)
             {
                 html.Append(_ajustaFamiliaFonteHtml);
             }
@@ -802,14 +803,16 @@ namespace BoletoNet
             }
 
             ///formatação do recibo do centende
-            if (FormatoCarne){
+            if (FormatoCarne)
+            {
                 html.Append(GeraHtmlCarne(GeraHtmlReciboCedente()));
             }
             else if (FormatoPropaganda)
             {
                 html.Append(GeraHtmlPropaganda(GeraHtmlReciboCedente()));
             }
-            else{
+            else
+            {
                 html.Append(GeraHtmlReciboCedente());
             }
 
@@ -1193,11 +1196,11 @@ namespace BoletoNet
 
             //if (!System.IO.File.Exists(fnLogo))  Comentado por diego.dariolli pois quando trocava o logo do banco, como já existia no caminho ele não substituia
             //{
-                Stream streamLogo = Assembly.GetExecutingAssembly().GetManifestResourceStream("BoletoNet.Imagens." + Utils.FormatCode(_ibanco.Codigo.ToString(), 3) + ".jpg");
-                using (Stream file = File.Create(fnLogo))
-                {
-                    CopiarStream(streamLogo, file);
-                }
+            Stream streamLogo = Assembly.GetExecutingAssembly().GetManifestResourceStream("BoletoNet.Imagens." + Utils.FormatCode(_ibanco.Codigo.ToString(), 3) + ".jpg");
+            using (Stream file = File.Create(fnLogo))
+            {
+                CopiarStream(streamLogo, file);
+            }
             //}
 
             string fnBarra = fileName + @"BoletoNetBarra.gif";
@@ -1398,19 +1401,20 @@ namespace BoletoNet
 
         public byte[] MontaBytesPDF(bool convertLinhaDigitavelToImage = false)
         {
-            var converter = new NReco.PdfGenerator.HtmlToPdfConverter();
-            converter.Margins = new PageMargins(){ Bottom = 0, Top = 0, Left = 0, Right = 0};
+            //var converter = new NReco.PdfGenerator.HtmlToPdfConverter();
+            //converter.Margins = new PageMargins(){ Bottom = 0, Top = 0, Left = 0, Right = 0};
 
-            if (!string.IsNullOrWhiteSpace(TempFilesPath))
-            {
-                converter.TempFilesPath = this.TempFilesPath;
-            }
+            //if (!string.IsNullOrWhiteSpace(TempFilesPath))
+            //{
+            //    converter.TempFilesPath = this.TempFilesPath;
+            //}
 
-            if (!string.IsNullOrEmpty(this.PdfToolPath))
-            {
-                converter.PdfToolPath = this.PdfToolPath;
-            }
-            return converter.GeneratePdf(this.MontaHtmlEmbedded(convertLinhaDigitavelToImage, true));
+            //if (!string.IsNullOrEmpty(this.PdfToolPath))
+            //{
+            //    converter.PdfToolPath = this.PdfToolPath;
+            //}
+            //return converter.GeneratePdf(this.MontaHtmlEmbedded(convertLinhaDigitavelToImage, true));
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -1428,50 +1432,51 @@ namespace BoletoNet
         /// <returns>byte[], Vetor de bytes do PDF</returns>
         public byte[] MontaBytesListaBoletosPDF(List<BoletoBancario> boletos, string tituloNaView = "", string CustomSwitches = "", string tituloPDF = "", bool PretoBranco = false, bool convertLinhaDigitavelToImage = false, int BoletosPorPagina = 1, float ZoomPercent = 100)
         {
-            StringBuilder htmlBoletos = new StringBuilder();
-            HtmlOfflineHeader(htmlBoletos, true, tituloNaView);
+            //StringBuilder htmlBoletos = new StringBuilder();
+            //HtmlOfflineHeader(htmlBoletos, true, tituloNaView);
 
-            if (!string.IsNullOrEmpty(tituloPDF))
-            {
-                htmlBoletos.Append("<br/><center><h1>");
-                htmlBoletos.Append(tituloPDF);
-                htmlBoletos.Append("</h1></center><br/>");
-            }
-            int qtdeBoletosPagina = 0;
-            foreach (BoletoBancario boleto in boletos)
-            {
-                qtdeBoletosPagina++;
+            //if (!string.IsNullOrEmpty(tituloPDF))
+            //{
+            //    htmlBoletos.Append("<br/><center><h1>");
+            //    htmlBoletos.Append(tituloPDF);
+            //    htmlBoletos.Append("</h1></center><br/>");
+            //}
+            //int qtdeBoletosPagina = 0;
+            //foreach (BoletoBancario boleto in boletos)
+            //{
+            //    qtdeBoletosPagina++;
 
-                if (qtdeBoletosPagina % BoletosPorPagina == 0)
-                {
-                    htmlBoletos.Append("<div class='break'>");
-                    qtdeBoletosPagina = 0;
-                }
-                else
-                {
-                    htmlBoletos.Append("<div>");
-                }
-                htmlBoletos.Append(boleto.MontaHtmlEmbedded(convertLinhaDigitavelToImage, true, false, false));
-                htmlBoletos.Append("</div>");
-            }
-            HtmlOfflineFooter(htmlBoletos);
+            //    if (qtdeBoletosPagina % BoletosPorPagina == 0)
+            //    {
+            //        htmlBoletos.Append("<div class='break'>");
+            //        qtdeBoletosPagina = 0;
+            //    }
+            //    else
+            //    {
+            //        htmlBoletos.Append("<div>");
+            //    }
+            //    htmlBoletos.Append(boleto.MontaHtmlEmbedded(convertLinhaDigitavelToImage, true, false, false));
+            //    htmlBoletos.Append("</div>");
+            //}
+            //HtmlOfflineFooter(htmlBoletos);
 
-            var converter = new NReco.PdfGenerator.HtmlToPdfConverter()
-            {
-                CustomWkHtmlArgs = CustomSwitches,
-                Grayscale = PretoBranco,
-                Zoom = ZoomPercent / 100
-            };
-            if (!string.IsNullOrEmpty(this.PdfToolPath))
-            {
-                converter.PdfToolPath = this.PdfToolPath;
-            }
-            if (!string.IsNullOrEmpty(this.TempFilesPath))
-            {
-                converter.TempFilesPath = this.TempFilesPath;
-            }
+            //var converter = new NReco.PdfGenerator.HtmlToPdfConverter()
+            //{
+            //    CustomWkHtmlArgs = CustomSwitches,
+            //    Grayscale = PretoBranco,
+            //    Zoom = ZoomPercent / 100
+            //};
+            //if (!string.IsNullOrEmpty(this.PdfToolPath))
+            //{
+            //    converter.PdfToolPath = this.PdfToolPath;
+            //}
+            //if (!string.IsNullOrEmpty(this.TempFilesPath))
+            //{
+            //    converter.TempFilesPath = this.TempFilesPath;
+            //}
 
-            return converter.GeneratePdf(htmlBoletos.ToString());
+            //return converter.GeneratePdf(htmlBoletos.ToString());
+            throw new NotImplementedException();
         }
 
         #endregion Geração do Html OffLine
