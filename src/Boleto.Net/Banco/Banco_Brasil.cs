@@ -64,10 +64,11 @@ namespace BoletoNet
                 !boleto.Carteira.Equals("18-019") &
                 !boleto.Carteira.Equals("18-027") &
                 !boleto.Carteira.Equals("18-035") &
+                !boleto.Carteira.Equals("18-043") &
                 !boleto.Carteira.Equals("18-140") &
                 !boleto.Carteira.Equals("31"))
 
-                throw new NotImplementedException("Carteira não informada. Utilize a carteira 11, 16, 17, 17-019, 17-027, 17-051, 18, 18-019, 18-027, 18-035, 18-140, 17-159, 17-140, 17-067 ou 31.");
+                throw new NotImplementedException("Carteira não informada. Utilize a carteira 11, 16, 17, 17-019, 17-027, 17-051, 18, 18-019, 18-027, 18-035, 18-140, 18-043, 17-159, 17-140, 17-067 ou 31.");
 
             //Verifica se o nosso número é válido
             if (Utils.ToString(boleto.NossoNumero) == string.Empty)
@@ -286,8 +287,8 @@ namespace BoletoNet
             #endregion Carteira 18
 
             #region Carteira 18-019
-            //Carteira 18, com variação 019
-            if (boleto.Carteira.Equals("18-019"))
+            //Carteira 18, com varia��o 019
+            if (boleto.Carteira.Equals("18-019") || boleto.Carteira.Equals("18-043"))
             {
                 /*
                  * Convênio de 7 posições
@@ -877,7 +878,7 @@ namespace BoletoNet
             #endregion Carteira 18
 
             #region Carteira 18-019
-            if (boleto.Carteira.Equals("18-019"))
+            if (boleto.Carteira.Equals("18-019") || boleto.Carteira.Equals("18-043"))
             {
                 if (boleto.Cedente.Convenio.ToString().Length == 7)
                 {
@@ -1641,7 +1642,8 @@ namespace BoletoNet
                     _segmentoQ += "2";
 
                 var enderecoSacadoComNumero = boleto.Sacado.Endereco.End;
-                if (!string.IsNullOrEmpty(boleto.Sacado.Endereco.Numero)) {
+                if (!string.IsNullOrEmpty(boleto.Sacado.Endereco.Numero))
+                {
                     enderecoSacadoComNumero += ", " + boleto.Sacado.Endereco.Numero;
                 }
 
@@ -1706,7 +1708,7 @@ namespace BoletoNet
                     // Desconto 3
                     _segmentoR += "000000000000000000000000"; //24 zeros
                 }
-                    
+
 
                 if (boleto.PercMulta > 0)
                 {
