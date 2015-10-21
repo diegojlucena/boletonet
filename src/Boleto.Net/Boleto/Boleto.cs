@@ -661,6 +661,7 @@ namespace BoletoNet
 				this.QuantidadeMoeda = 0;
 				this.Banco.FormataCodigoBarra(this);
 				this.Banco.FormataLinhaDigitavel(this);
+			    NossoNumeroSemFormatacao = NossoNumero;
 				this.Banco.FormataNossoNumero(this);
 			}
 			catch (Exception ex)
@@ -668,5 +669,7 @@ namespace BoletoNet
 				throw new Exception("Erro durante a formatação dos campos.", ex);
 			}
 		}
+
+	    public string NossoNumeroSemFormatacao { get; set; }
 	}
 }
