@@ -323,7 +323,11 @@ namespace BoletoNet
 		public string NossoNumero
 		{
 			get { return this._nossoNumero; }
-			set { this._nossoNumero = value; }
+		    set
+		    {
+		        NossoNumeroSemFormatacao = _nossoNumero;
+		        this._nossoNumero = value;
+		    }
 		}
 
         /// <summary> 
@@ -661,7 +665,6 @@ namespace BoletoNet
 				this.QuantidadeMoeda = 0;
 				this.Banco.FormataCodigoBarra(this);
 				this.Banco.FormataLinhaDigitavel(this);
-			    NossoNumeroSemFormatacao = NossoNumero;
 				this.Banco.FormataNossoNumero(this);
 			}
 			catch (Exception ex)
