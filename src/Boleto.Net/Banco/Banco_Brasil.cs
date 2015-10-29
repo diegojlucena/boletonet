@@ -2441,9 +2441,10 @@ namespace BoletoNet
         {
             try
             {
-                TRegistroEDI_BancoBrasil_Retorno reg = new TRegistroEDI_BancoBrasil_Retorno();
+
+                var reg = registro[0] == '1' ? (TRegistroEDI_BancoBrasil_RetornoBase) new RegistroEdiBancoBrasilRetornoConvenio6Digitos() : new RegistroEdiBancoBrasilRetornoConvenio7Digitos();
                 //
-                reg.LinhaRegistro = registro;
+                reg.LinhaRegistro = registro; 
                 reg.DecodificarLinha();
 
                 //Passa para o detalhe as propriedades de reg;
