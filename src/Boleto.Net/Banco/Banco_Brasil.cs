@@ -46,7 +46,7 @@ namespace BoletoNet
         public override void ValidaBoleto(Boleto boleto)
         {
             if (string.IsNullOrEmpty(boleto.Carteira))
-                throw new NotImplementedException("Carteira n√£o informada. Utilize a carteira 11, 16, 17, 17-019, 17-027, 17-051, 18, 18-019, 18-027, 18-035, 18-140, 17-159, 17-140, 17-067 ou 31.");
+                throw new NotImplementedException("Carteira n„o informada. Utilize a carteira 11, 16, 17, 17-019, 17-027, 17-051, 18, 18-019, 18-027, 18-035, 18-140, 18-043, 17-159, 17-140, 17-067 ou 31.");
 
             //Verifica as carteiras implementadas
             if (!boleto.Carteira.Equals("11") &
@@ -1280,6 +1280,7 @@ namespace BoletoNet
                 case "17-159":
                 case "17-167":
                 case "18-019":
+                case "18-043":
                     boleto.NossoNumero = string.Format("{0}/{1}", LimparCarteira(boleto.Carteira), boleto.NossoNumero);
                     return;
                 case "31":
