@@ -39,6 +39,10 @@ namespace BoletoNet
         /// </summary>
         string GerarDetalheRemessa(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo);
         /// <summary>
+        /// Gera os registros de detalhes opcionais do arquivo de remessa
+        /// </summary>
+        string[] GerarDetalhesOpcionaisDeRemessa(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo);
+        /// <summary>
         /// Gera o header de arquivo do arquivo de remessa
         /// </summary>
         string GerarHeaderRemessa(Cedente cendente, TipoArquivo tipoArquivo, int numeroArquivoRemessa);

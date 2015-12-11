@@ -100,6 +100,14 @@ namespace BoletoNet
             return _remessa;
         }
         /// <summary>
+        /// Gera registros de detalhes opcionais do arquivo remessa
+        /// </summary>
+        public virtual string[] GerarDetalhesOpcionaisDeRemessa(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo)
+        {
+            string[] _remessa = new string[0];
+            return _remessa;
+        }
+        /// <summary>
         /// Gera registros de Mensagem Variavel do arquivo remessa
         /// </summary>
         public virtual string GerarMensagemVariavelRemessa(Boleto boleto, ref int numeroRegistro, TipoArquivo tipoArquivo)

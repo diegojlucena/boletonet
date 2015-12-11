@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,6 +7,7 @@ using BoletoNet.Util;
 using System.Drawing;
 using System.ComponentModel;
 using System.Drawing.Imaging;
+using System.Linq;
 
 namespace BoletoNet
 {
@@ -375,7 +377,7 @@ namespace BoletoNet
             {
                 string result = "";
 
-                if (maxTest == true)
+                 if (maxTest == true)
                 {
                     // max
                     if (SringToBeFit.Length > maxLength)
@@ -506,6 +508,26 @@ namespace BoletoNet
             final = Strings.Right(seq, qtde);
             return FitStringLength(final, qtde, qtde, ch, 0, true, true, completaPelaEsquerda);
             ;
+        }
+
+
+        public static IEnumerable<IEnumerable<T>> Chunk<T>(IEnumerable<T> list, int totalSize, int chunkSize)
+        {
+            int i = 0;
+            while (i < totalSize)
+            {
+                yield return list.Skip(i).Take(chunkSize);
+                i += chunkSize;
+            }
+        }
+        // convenience for "countable" lists
+        public static IEnumerable<IEnumerable<T>> Chunk<T>(ICollection<T> list, int chunkSize)
+        {
+            return Chunk(list, list.Count, chunkSize);
+        }
+        public static IEnumerable<IEnumerable<T>> Chunk<T>(IEnumerable<T> list, int chunkSize)
+        {
+            return Chunk(list, list.Count(), chunkSize);
         }
 
         public static string Transform(string text, string mask, char charMask = 'X')

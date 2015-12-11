@@ -1,5 +1,7 @@
 using BoletoNet.Util;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 
 [assembly: WebResource("BoletoNet.Imagens.237.jpg", "image/jpg")]
@@ -889,6 +891,39 @@ namespace BoletoNet
             }
         }
 
+        /// <summary>
+        /// DETALHE do arquivo CNAB
+        /// Gera o DETALHES opcionais do arquivo remessa de acordo com o lay-out informado
+        /// </summary>
+        public override string[] GerarDetalhesOpcionaisDeRemessa(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo)
+        {
+            try
+            {
+                string[] _detalhe = null;
+
+                base.GerarDetalheRemessa(boleto, numeroRegistro, tipoArquivo);
+
+                switch (tipoArquivo)
+                {
+                    case TipoArquivo.CNAB240:
+                        _detalhe = new string[0];
+                        break;
+                    case TipoArquivo.CNAB400:
+                        _detalhe = GerarDetalhesOpcionaisDeRemessaCNAB400(boleto, numeroRegistro, tipoArquivo);
+                        break;
+                    case TipoArquivo.Outro:
+                        throw new Exception("Tipo de arquivo inexistente.");
+                }
+
+                return _detalhe;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro durante a geraÁ„o do DETALHE arquivo de REMESSA.", ex);
+            }
+        }
+
         public string GerarDetalheRemessaCNAB240()
         {
             throw new NotImplementedException("Fun√ß√£o n√£o implementada.");
@@ -1134,6 +1169,87 @@ namespace BoletoNet
             catch (Exception ex)
             {
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
+            }
+        }
+
+        public string[] GerarDetalhesOpcionaisDeRemessaCNAB400(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo)
+        {
+            try
+            {
+                var detalhes = new List<string>();
+
+                var chunks = Utils.Chunk(boleto.Instrucoes, 4);
+
+                foreach (var chunk in chunks)
+                {
+                    var m = chunk.ToList();
+                    var mensagens = new[]{"","","",""};
+                    for (int i = 0; i < m.Count; i++)
+                    {
+                        mensagens[i] = m[i].Descricao;
+                    }
+
+                    var linha = string.Format("2{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}{14}{15}",
+                        Utils.FitStringLength(mensagens[0], 80, 80, ' ', 0, true, true, false),
+                        Utils.FitStringLength(mensagens[1], 80, 80, ' ', 0, true, true, false),
+                        Utils.FitStringLength(mensagens[2], 80, 80, ' ', 0, true, true, false),
+                        Utils.FitStringLength(mensagens[3], 80, 80, ' ', 0, true, true, false),
+                        "000000",
+                        "0000000000000",
+                        "000000",
+                        "0000000000000",
+                        "       ",
+                        Utils.FitStringLength(boleto.Carteira, 3, 3, '0', 0, true, true, true),
+                        // Codigo da carteira (3)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.Agencia, 5, 5, '0', 0, true, true, true),
+                        //N da agencia(5)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.Conta, 7, 7, '0', 0, true, true, true),
+                        //Conta Corrente(7)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.DigitoConta, 1, 1, '0', 0, true, true, true),
+                        //D da conta(1)
+                        Utils.FitStringLength(boleto.NossoNumero, 11, 11, '0', 0, true, true, true),
+                        //Nosso Numero (11) (071 - 081)
+                        // ForÁa o NossoNumero a ter 11 dÌgitos. Alterado por Luiz Ponce 07/07/2012
+                        Mod11Bradesco(
+                            boleto.Carteira +
+                            Utils.FitStringLength(boleto.NossoNumero, 11, 11, '0', 0, true, true, true), 7),
+                        // Digito de Auto Conferencia do Nosso N˙mero (01)
+                        Utils.FitStringLength(numeroRegistro.ToString(), 6, 6, '0', 0, true, true, true));
+
+                    detalhes.Add(linha);
+                    numeroRegistro++;
+                }
+
+                var infoSacado = string.Format("7{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}", 
+                    Utils.FitStringLength(boleto.Sacado.Endereco.End.TrimStart(' '), 45, 45, ' ', 0, true, true, false).ToUpper(),
+                    Utils.FitStringLength(boleto.Sacado.Endereco.CEP, 8, 8, '0', 0, true, true, true).ToUpper(),
+                    Utils.FitStringLength(boleto.Sacado.Endereco.Cidade.TrimStart(' '), 20, 20, ' ', 0, true, true, false).ToUpper(),
+                    Utils.FitStringLength(boleto.Sacado.Endereco.UF.TrimStart(' '), 2, 2, ' ', 0, true, true, false).ToUpper(),
+                    Utils.FitStringLength("", 290, 290, ' ', 0, true, true, false),
+                    Utils.FitStringLength(boleto.Carteira, 3, 3, '0', 0, true, true, true),
+                        // Codigo da carteira (3)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.Agencia, 5, 5, '0', 0, true, true, true),
+                        //N da agencia(5)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.Conta, 7, 7, '0', 0, true, true, true),
+                        //Conta Corrente(7)
+                        Utils.FitStringLength(boleto.Cedente.ContaBancaria.DigitoConta, 1, 1, '0', 0, true, true, true),
+                        //D da conta(1)
+                        Utils.FitStringLength(boleto.NossoNumero, 11, 11, '0', 0, true, true, true),
+                        //Nosso Numero (11) (071 - 081)
+                        // ForÁa o NossoNumero a ter 11 dÌgitos. Alterado por Luiz Ponce 07/07/2012
+                        Mod11Bradesco(
+                            boleto.Carteira +
+                            Utils.FitStringLength(boleto.NossoNumero, 11, 11, '0', 0, true, true, true), 7),
+                        // Digito de Auto Conferencia do Nosso N˙mero (01)
+                        Utils.FitStringLength(numeroRegistro.ToString(), 6, 6, '0', 0, true, true, true)
+                    );
+                detalhes.Add(infoSacado);
+
+                return detalhes.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar DETALHE OPCIONAL do arquivo CNAB400.", ex);
             }
         }
 

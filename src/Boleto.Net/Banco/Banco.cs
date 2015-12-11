@@ -582,6 +582,11 @@ namespace BoletoNet
             return _IBanco.ObterNossoNumeroSemConvenioOuDigitoVerificador(convenio, nossoNumero);
         }
 
-        #endregion Métodos de Leitura do arquivo de Retorno
-    }
+		public string[] GerarDetalhesOpcionaisDeRemessa(Boleto boleto, int numeroRegistro, TipoArquivo tipoArquivo)
+		{
+			return _IBanco.GerarDetalhesOpcionaisDeRemessa(boleto, numeroRegistro, tipoArquivo);
+		}
+
+		#endregion Métodos de Leitura do arquivo de Retorno
+	}
 }
