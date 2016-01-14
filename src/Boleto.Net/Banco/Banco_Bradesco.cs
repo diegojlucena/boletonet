@@ -1328,6 +1328,20 @@ namespace BoletoNet
             bool vRetorno = true;
             string vMsg = string.Empty;
             ////IMPLEMENTACAO PENDENTE...
+
+            //validando endereços
+            foreach (var boleto in boletos)
+            {
+                if (boleto.Sacado.Endereco != null && !string.IsNullOrEmpty(boleto.Sacado.Endereco.End) &&
+                    !string.IsNullOrEmpty(boleto.Sacado.Endereco.Cidade) &&
+                    !string.IsNullOrEmpty(boleto.Sacado.Endereco.UF) &&
+                    !string.IsNullOrEmpty(boleto.Sacado.Endereco.CEP)) continue;
+
+                vMsg = string.Format("Endereço do Pagador {0} no boleto {1} inválido", boleto.Sacado.Nome, boleto.NumeroDocumento);
+                vRetorno = false;
+                break;
+            }
+
             mensagem = vMsg;
             return vRetorno;
         }
