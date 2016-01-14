@@ -1168,7 +1168,7 @@ namespace BoletoNet
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
+                throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400. NN:"+boleto.NossoNumero, ex);
             }
         }
 
