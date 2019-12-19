@@ -1216,7 +1216,7 @@ namespace BoletoNet
                         // Digito de Auto Conferencia do Nosso Número (01)
                         Utils.FitStringLength(numeroRegistro.ToString(), 6, 6, '0', 0, true, true, true));
 
-                    detalhes.Add(linha);
+                    detalhes.Add(Utils.SubstituiCaracteresEspeciais(linha));
                     numeroRegistro++;
                 }
 
@@ -1243,7 +1243,7 @@ namespace BoletoNet
                         // Digito de Auto Conferencia do Nosso Número (01)
                         Utils.FitStringLength(numeroRegistro.ToString(), 6, 6, '0', 0, true, true, true)
                     );
-                detalhes.Add(infoSacado);
+                detalhes.Add(Utils.SubstituiCaracteresEspeciais(infoSacado));
 
                 return detalhes.ToArray();
             }
